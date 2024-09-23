@@ -15,10 +15,11 @@
     nixpkgs.follows = "geonix/nixpkgs";
   };
 
-  outputs = inputs@{ flake-parts, ... }:
+  outputs = inputs@{ nixgl, flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
 
       systems = [ "x86_64-linux" ];
+      overlays = [ nixgl.overlay ];
 
       perSystem = { config, self', inputs', pkgs, system, ... }: {
 
@@ -32,6 +33,7 @@
               extraPythonPackages = p: [
                 pkgs.python3Packages.flask
                 geopkgs.python3-fiona
+                pkgs.nixgl.nixGLIntel
               ];
             });
           };
